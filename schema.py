@@ -28,7 +28,7 @@ schema = StructType([
 ])
 
 #example data
-data = [(1, 11, "mike", 1, "blanket", "bedding", "card", 49, 20.22, "dfa")]
+data = [(1, 11, "mike", 1, "blanket", "bedding", "card", 49, 20.22, "2023-04-25 00:00:00", "USA", "Houston", "everythingstore.com", 10, "Y", "N/A")]
 
 
 # Convert generated data to a DataFrame
