@@ -9,5 +9,8 @@ data = [("Alice", 1), ("Bob", 2), ("Catherine", 3)]
 columns = ["Name", "Id"]
 df = spark.createDataFrame(data, columns)
 
-# Write DataFrame to CSV
-df.write.csv("project2/data.csv", header=True, mode="overwrite")
+#Coalesce the DataFrame to a single partition 
+df = df.coalesce(1)
+
+# Write DataFrame to CSV 
+df.write.csv("/project2/data", header=True, mode="overwrite")
