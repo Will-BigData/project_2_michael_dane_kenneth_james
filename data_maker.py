@@ -10,10 +10,25 @@ spark = SparkSession.builder.appName("FurnitureStoreDataset").getOrCreate()
 
 # List of first names
 
-names = ["James","Mary","Michael","Patricia","Robert","Jennifer","John","David","Elizabeth","William","Barbara",
+fnames = ["James","Mary","Michael","Patricia","Robert","Jennifer","John","David","Elizabeth","William","Barbara",
 "Richard","Susan","Joseph","Jessica","Thomas","Karen","Christopher","Sarah","Charles","Lisa","Daniel","Nancy","Matthew","Sandra","Anthony","Betty",
 "Mark","Ashley","Donald","Emily","Steven","Kimberly","Andrew","Margaret","Paul","Donna","Joshua","Michelle","Kenneth","Carol",
 "Kevin","Amanda","Brian","Melissa","Timothy","Deborah","Ronald","Stephanie"]
+
+lnames = ["Anderson", "Baker", "Campbell", "Clark", "Davis", "Edwards", "Foster", "Garcia", "Harris", "Johnson", "King", "Lewis",
+"Martinez", "Nelson", "Brine", "Patel", "Ramirez", "Smith", "Taylor", "Thompson", "Upton", "Vasquez", "Walker", "White", "Young",
+"Adams", "Bell", "Carter", "Diaz", "Elliott", "Fisher", "Gomez", "Hayes", "Jenkins", "Kelly", "Long", "Morgan", "Nguyen", "Ortiz",
+"Price", "Reed", "Sanchez", "Torres", "Wright", "Xu", "Yang", "Zeller", "Bishop", "Harper", "Kim"]
+
+locations = [
+    ("United States", "New York City"), ("United States", "Los Angeles"), ("United States", "Chicago"), ("United States", "Miami"), 
+    ("France", "Paris"), ("France", "Marseille"), ("France", "Lyon"), ("France", "Nice"),
+    ("Japan", "Tokyo"), ("Japan", "Osaka"), ("Japan", "Kyoto"), ("Japan", "Hiroshima"),
+    ("Australia", "Sydney"), ("Australia", "Melbourne"), ("Australia", "Brisbane"), ("Australia", "Perth"),
+    ("Italy", "Rome"), ("Italy", "Milan"), ("Italy", "Venice"), ("Italy", "Florence"),
+    ("Canada", "Toronto"), ("Canada", "Vancouver"), ("Canada", "Montreal"), ("Canada", "Calgary"),
+    ("Spain", "Madrid"), ("Spain", "Barcelona"), ("Spain", "Valencia"), ("Spain", "Seville"),
+    ("Germany", "Berlin"), ("Germany", "Munich"), ("Germany", "Hamburg"), ("Germany", "Frankfurt")]
 
 # Updated list with hard-coded product_id, product_name, product_category, and price
 products = [
@@ -96,20 +111,34 @@ schema = StructType([
 ])
 
 # Create DataFrame
-df = spark.createDataFrame(data, schema=schema)
+randomdf = spark.createDataFrame(data, schema=schema)
+trend1df = spark.createDataFrame(data, schema=schema)
+trend2df = spark.createDataFrame(data, schema=schema)
+trend3df = spark.createDataFrame(data, schema=schema)
+trend4df = spark.createDataFrame(data, schema=schema)
 
 
 # Convert 'datetime' to TimestampType
-df = df.withColumn("datetime", to_timestamp("datetime", "yyyy-MM-dd HH:mm:ss"))
+randomdf = randomdf.withColumn("datetime", to_timestamp("datetime", "yyyy-MM-dd HH:mm:ss"))
+
+
+
+
+
+
+
+
+
+
 
 #Coalesce the DataFrame to a single partition
-df = df.coalesce(1)
+randomdf = randomdf.coalesce(1)
 
 # Show the DataFrame and schema
-df.show()
-df.printSchema()
+randomdf.show()
+randomdf.printSchema()
 
 # Write DataFrame to CSV 
-df.write.csv("/project2/data", header=True, mode="overwrite")
+randomdf.write.csv("/project2/data", header=True, mode="overwrite")
 
 
