@@ -8,49 +8,51 @@ from datetime import datetime
 # Initialize Spark session
 spark = SparkSession.builder.appName("FurnitureStoreDataset").getOrCreate()
 
-# List of furniture products and their categories
+# Updated list with hard-coded product_id, product_name, product_category, and price
 products = [
-    ("Classic Wooden Bed", "Bedroom Furniture"),
-    ("Memory Foam Mattress", "Bedroom Furniture"),
-    ("L-Shaped Sofa", "Living Room Furniture"),
-    ("Recliner Chair", "Living Room Furniture"),
-    ("Oak Dining Table", "Dining Room Furniture"),
-    ("Leather Dining Chair", "Dining Room Furniture"),
-    ("Wooden Coffee Table", "Living Room Furniture"),
-    ("Modular Bookcase", "Home Office Furniture"),
-    ("Ergonomic Office Chair", "Home Office Furniture"),
-    ("Metal Bed Frame", "Bedroom Furniture"),
-    ("Vanity Dresser", "Bedroom Furniture"),
-    ("Upholstered Bench", "Entryway Furniture"),
-    ("Glass Console Table", "Entryway Furniture"),
-    ("TV Stand", "Living Room Furniture"),
-    ("Outdoor Patio Set", "Outdoor Furniture"),
-    ("Garden Lounge Chair", "Outdoor Furniture"),
-    ("Kids Bunk Bed", "Kids Furniture"),
-    ("Nursery Rocking Chair", "Kids Furniture"),
-    ("Shoe Storage Cabinet", "Entryway Furniture"),
-    ("Standing Desk", "Home Office Furniture")
+    (1, "Classic Wooden Bed", "Bedroom Furniture", 299.99),
+    (2, "Memory Foam Mattress", "Bedroom Furniture", 199.99),
+    (3, "L-Shaped Sofa", "Living Room Furniture", 499.99),
+    (4, "Recliner Chair", "Living Room Furniture", 249.99),
+    (5, "Oak Dining Table", "Dining Room Furniture", 399.99),
+    (6, "Leather Dining Chair", "Dining Room Furniture", 89.99),
+    (7, "Wooden Coffee Table", "Living Room Furniture", 149.99),
+    (8, "Modular Bookcase", "Home Office Furniture", 199.99),
+    (9, "Ergonomic Office Chair", "Home Office Furniture", 129.99),
+    (10, "Metal Bed Frame", "Bedroom Furniture", 149.99),
+    (11, "Vanity Dresser", "Bedroom Furniture", 189.99),
+    (12, "Upholstered Bench", "Entryway Furniture", 99.99),
+    (13, "Glass Console Table", "Entryway Furniture", 129.99),
+    (14, "TV Stand", "Living Room Furniture", 89.99),
+    (15, "Outdoor Patio Set", "Outdoor Furniture", 299.99),
+    (16, "Garden Lounge Chair", "Outdoor Furniture", 79.99),
+    (17, "Kids Bunk Bed", "Kids Furniture", 249.99),
+    (18, "Nursery Rocking Chair", "Kids Furniture", 119.99),
+    (19, "Shoe Storage Cabinet", "Entryway Furniture", 59.99),
+    (20, "Standing Desk", "Home Office Furniture", 249.99),
+    (21, "Blanket", "Bedroom Furniture", 29.99)  # Added Blanket with price
 ]
 
-# Function to randomly generate a product
+# Function to randomly generate a product with product_id, product_name, product_category, and price
 def generate_product():
-    return random.choice(products)
+    product_id, product_name, product_category, price = random.choice(products)
+    return product_id, product_name, product_category, price
 
-# Generate a list of records with random data
+# Example usage in generating records
 def generate_records(num_records):
     data = []
     for i in range(num_records):
-        product_name, product_category = generate_product()
+        product_id, product_name, product_category, price = generate_product()
         record = Row(
-            order_id=i + 1,
-            customer_id=random.randint(1, 100),
-            customer_name=random.choice(["Mike", "Anna", "John", "Sarah", "Tom"]),
-            product_id=random.randint(1, 50),
+            order_id=i + 1, #change later
+            customer_id=random.randint(1, 100), #change later
+            customer_name=random.choice(["Mike", "Anna", "John", "Sarah", "Tom"]), #change later
+            product_id=product_id, 
             product_name=product_name,
             product_category=product_category,
             payment_type=random.choice(["card", "cash", "online"]),
             qty=random.randint(1, 5),
-            price=round(random.uniform(20, 500), 2),
+            price=price,  # Use the hard-coded price
             datetime=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             country="USA",
             city=random.choice(["Houston", "Austin", "Dallas"]),
@@ -93,10 +95,14 @@ df = spark.createDataFrame(data, schema=schema)
 # Convert 'datetime' to TimestampType
 df = df.withColumn("datetime", to_timestamp("datetime", "yyyy-MM-dd HH:mm:ss"))
 
+#Coalesce the DataFrame to a single partition
+df = df.coalesce(1)
+
 # Show the DataFrame and schema
 df.show()
 df.printSchema()
 
 # Write DataFrame to CSV 
 df.write.csv("/project2/data", header=True, mode="overwrite")
+
 
