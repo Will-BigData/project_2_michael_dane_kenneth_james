@@ -8,6 +8,13 @@ from datetime import datetime
 # Initialize Spark session
 spark = SparkSession.builder.appName("FurnitureStoreDataset").getOrCreate()
 
+# List of first names
+
+names = ["James","Mary","Michael","Patricia","Robert","Jennifer","John","David","Elizabeth","William","Barbara",
+"Richard","Susan","Joseph","Jessica","Thomas","Karen","Christopher","Sarah","Charles","Lisa","Daniel","Nancy","Matthew","Sandra","Anthony","Betty",
+"Mark","Ashley","Donald","Emily","Steven","Kimberly","Andrew","Margaret","Paul","Donna","Joshua","Michelle","Kenneth","Carol",
+"Kevin","Amanda","Brian","Melissa","Timothy","Deborah","Ronald","Stephanie"]
+
 # Updated list with hard-coded product_id, product_name, product_category, and price
 products = [
     (1, "Classic Wooden Bed", "Bedroom Furniture", 299.99),
