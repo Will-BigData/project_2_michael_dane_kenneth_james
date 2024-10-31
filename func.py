@@ -27,18 +27,6 @@ def random_date():
 
 
 
-
-# Helper function to generate random datetime
-def random_date(start, end):
-    """Generate a random datetime between `start` and `end`."""
-    delta = end - start
-    random_seconds = random.randint(0, int(delta.total_seconds()))
-    return start + timedelta(seconds=random_seconds)
-
-# Set the start and end date for the range
-start_date = datetime(2020, 1, 1)
-end_date = datetime(2022, 1, 1) 
-
 # Helper function to generate random datetime in December of specified years
 def random_date_in_december():
     """Generate a random datetime in December 2020 or December 2021."""

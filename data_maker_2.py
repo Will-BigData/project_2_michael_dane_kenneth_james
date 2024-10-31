@@ -40,14 +40,15 @@ def generate_records(num_records, date_function, product_type):
 
 # Generate 9000 random records
 num_records = 9000
-data = generate_records(num_records, random_date, products)
+data = generate_records(num_records, random_date(), products)
 
 #Generate 1000 records of michael's trend
-michael_trend = generate_records(1000, random_date_in_december, product_blanket)
+michael_trend = generate_records(1000, random_date_in_december(), product_blanket)
 
-data.append(michael_trend)
+data.extend(michael_trend)
 
-data.append()
+
+
 # Define schema
 schema = StructType([
     StructField("order_id", IntegerType(), True),
