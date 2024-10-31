@@ -1,8 +1,5 @@
 import random
 from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType, TimestampType
-from pyspark.sql import Row
-from pyspark.sql.functions import to_timestamp
 import pyspark.sql.functions as sf
 
 # Initialize Spark session
