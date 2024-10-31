@@ -50,6 +50,7 @@ products = [
 ]
 
 product_blanket =  [ (21, "Blanket", "Bedroom Furniture", 29.99) ]
+product_hammock = [ (22, "Hammock", "Outdoor Furniture", 49.99) ]
 
 
 #list of websites 

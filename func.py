@@ -43,6 +43,23 @@ def random_date_in_december():
     
     return start_date + timedelta(seconds=random_seconds)
 
+# Helper function to generate random datetime between June 1 and August 31 of specified years
+def random_date_in_summer():
+    """Generate a random datetime between June 1 and August 31, 2020 or 2021."""
+    # Choose a random year between 2020 and 2021
+    year = random.choice([2020, 2021])
+    
+    # Define the start and end of summer for the chosen year
+    start_date = datetime(year, 6, 1)
+    end_date = datetime(year, 8, 31, 23, 59, 59)
+    
+    # Calculate the time delta in seconds for the period
+    delta = end_date - start_date
+    random_seconds = random.randint(0, int(delta.total_seconds()))
+    
+    return start_date + timedelta(seconds=random_seconds)
+
+
 
 # Check if city is on the list of bulk buyers
 def check_city(city):
