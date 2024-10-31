@@ -17,6 +17,7 @@ def generate_records(num_records, date_function, product_type):
         product_id, product_name, product_category, price = generate_product(product_type)
         customer_id, customer_name, country, city = generate_customers()
         payment_txn_success = random.choice(["Y", "N"])
+        bulk_mulitplier = check_city(city)
         record = Row(
             order_id=i + 1,
             customer_id= customer_id,
@@ -25,7 +26,7 @@ def generate_records(num_records, date_function, product_type):
             product_name=product_name,
             product_category=product_category,
             payment_type=random.choice(["card", "apple pay", "paypal"]),
-            qty=random.randint(1, 5),
+            qty=random.randint(1, 5) * bulk_mulitplier,
             price=price,  
             datetime=date_function.strftime("%Y-%m-%d %H:%M:%S"),
             country=country,

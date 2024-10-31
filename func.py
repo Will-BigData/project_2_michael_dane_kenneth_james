@@ -42,3 +42,14 @@ def random_date_in_december():
     random_seconds = random.randint(0, int(delta.total_seconds()))
     
     return start_date + timedelta(seconds=random_seconds)
+
+
+# Check if city is on the list of bulk buyers
+def check_city(city):
+    bulk_buyers = ["Chicago", "Vancouver", "Los Angeles", "Berlin"]
+
+    for buyer in bulk_buyers:
+        if buyer == city:
+            return random.randint(4,7)
+    
+    return 1
