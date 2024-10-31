@@ -39,12 +39,12 @@ def generate_records(num_records, date_function, product_type):
         data.append(record)
     return data
 
-# Generate 9000 random records
-num_records = 9000
+# Generate 10000 random records
+num_records = 10000
 data = generate_records(num_records, random_date(), products)
 
-#Generate 1000 records of michael's trend
-michael_trend = generate_records(1000, random_date_in_december(), product_blanket)
+#Generate 300 records of michael's trend
+michael_trend = generate_records(300, random_date_in_december(), product_blanket)
 
 data.extend(michael_trend)
 
