@@ -39,16 +39,16 @@ def generate_records(num_records, date_function, product_type, payment_type_func
         data.append(record)
     return data
 
-# Generate 9000 random records
-num_records = 9000
-data = generate_records(num_records, random_date(), products, rand_payment_type())
+# Generate 10000 random records
+num_records = 10000
+data = generate_records(num_records, random_date(), products)
 
-#Generate 1000 records of michael's trend
-michael_trend = generate_records(1000, random_date_in_december(), product_blanket, rand_payment_type())
+#Generate 300 records of michael's trend
+michael_trend = generate_records(300, random_date_in_december(), product_blanket)
 
 data.extend(michael_trend)
 
-dane_trend = generate_records(1000, random_date(), products, payment_type())
+dane_trend = generate_records(300, random_date(), products, payment_type())
 
 data.extend(dane_trend)
 
