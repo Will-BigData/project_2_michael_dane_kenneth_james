@@ -16,6 +16,7 @@ def generate_records(num_records):
     for i in range(num_records):
         product_id, product_name, product_category, price = generate_product()
         customer_id, customer_name, country, city = generate_customers()
+        payment_txn_success = random.choice(["Y", "N"])
         record = Row(
             order_id=i + 1,
             customer_id= customer_id,
@@ -31,8 +32,8 @@ def generate_records(num_records):
             city= city,
             ecommerce_website_name= random.choice(websites),
             payment_txn_id=str(random.randint(1000, 9999)),
-            payment_txn_success=random.choice(["Y", "N"]),
-            failure_reason=random.choice(["N/A", "Insufficient Funds", "Network Error"])
+            payment_txn_success= payment_txn_success,
+            failure_reason= "SUCCESS" if payment_txn_success == "Y" else random.choice(["Insufficient Funds", "Network Error"])
         )
         data.append(record)
     return data
