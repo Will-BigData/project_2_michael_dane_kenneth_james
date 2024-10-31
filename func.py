@@ -5,8 +5,8 @@ from var import *
 
 
 # Function to randomly generate a product with product_id, product_name, product_category, and price
-def generate_product(products):
-    product_id, product_name, product_category, price = random.choice(products)
+def generate_product(prod):
+    product_id, product_name, product_category, price = random.choice(prod)
     return product_id, product_name, product_category, price
 
 # Function to randomly generate a customer with customer_id, customer_name, country, and city

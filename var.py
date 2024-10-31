@@ -49,5 +49,8 @@ products = [
     #(21, "Blanket", "Bedroom Furniture", 29.99)  #will add this later to my trend since this product will only sell during december
 ]
 
+product_blanket =  [ (21, "Blanket", "Bedroom Furniture", 29.99) ]
+
+
 #list of websites 
 websites = [ ("HomeHavenFurniture.com"), ("StyleNestFurniture.com"), ("ChicSpaceFurnishings.com"), ("CozyCornerDecor.com"), ("TimelessHomeStyles.com")]

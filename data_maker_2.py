@@ -14,7 +14,7 @@ spark = SparkSession.builder.appName("FurnitureStoreDataset").getOrCreate()
 def generate_records(num_records, date_function, product_type):
     data = []
     for i in range(num_records):
-        product_id, product_name, product_category, price = generate_product()
+        product_id, product_name, product_category, price = generate_product(product_type)
         customer_id, customer_name, country, city = generate_customers()
         payment_txn_success = random.choice(["Y", "N"])
         record = Row(
@@ -27,7 +27,7 @@ def generate_records(num_records, date_function, product_type):
             payment_type=random.choice(["card", "apple pay", "paypal"]),
             qty=random.randint(1, 5),
             price=price,  
-            datetime=random_date(start_date, end_date).strftime("%Y-%m-%d %H:%M:%S"),
+            datetime=date_function.strftime("%Y-%m-%d %H:%M:%S"),
             country=country,
             city= city,
             ecommerce_website_name= random.choice(websites),
@@ -40,10 +40,12 @@ def generate_records(num_records, date_function, product_type):
 
 # Generate 9000 random records
 num_records = 9000
-data = generate_records(num_records, random_date)
+data = generate_records(num_records, random_date, products)
 
 #Generate 1000 records of michael's trend
-michael_trend = generate_records(1000, random_date_in_december)
+michael_trend = generate_records(1000, random_date_in_december, product_blanket)
+
+data.append(michael_trend)
 
 data.append()
 # Define schema
