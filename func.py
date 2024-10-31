@@ -53,3 +53,11 @@ def check_city(city):
             return random.randint(4,7)
     
     return 1
+
+#returns random payment type
+def rand_payment_type():
+    return random.choice(["Card", "Internet Banking", "UPI", "Wallet"])
+
+#returns specific payment type for trend
+def payment_type():
+    return "Internet Banking"
