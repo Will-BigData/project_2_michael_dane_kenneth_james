@@ -18,6 +18,7 @@ def generate_records(num_records, date_function, product_type):
         customer_id, customer_name, country, city = generate_customers()
         payment_txn_success = random.choice(["Y", "N"])
         bulk_mulitplier = check_city(city)
+        payment = random.choice(["Card", "Internet Banking", "UPI", "Wallet"])
         record = Row(
             order_id=i + 1,
             customer_id= customer_id,
@@ -25,7 +26,7 @@ def generate_records(num_records, date_function, product_type):
             product_id=product_id, 
             product_name=product_name,
             product_category=product_category,
-            payment_type=random.choice(["card", "apple pay", "paypal"]),
+            payment_type=payment,
             qty=random.randint(1, 5) * bulk_mulitplier,
             price=price,  
             datetime=date_function.strftime("%Y-%m-%d %H:%M:%S"),
@@ -48,11 +49,16 @@ michael_trend = generate_records(300, random_date_in_december(), product_blanket
 
 data.extend(michael_trend)
 
+<<<<<<< HEAD
 #Generate 500 records of Kenny's Trend
 kenny_trend = generate_records(500, random_date_in_summer(), product_hammock)
 
 data.extend(kenny_trend)
+=======
+dane_trend = generate_records(300, random_date(), products)
+>>>>>>> 94b9c28f0467d119177f9878557960acd72e109c
 
+data.extend(dane_trend)
 
 # Define schema
 schema = StructType([
