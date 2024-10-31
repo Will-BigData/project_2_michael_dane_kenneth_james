@@ -3,10 +3,14 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType, TimestampType
 from pyspark.sql import Row
 from pyspark.sql.functions import to_timestamp
+import pyspark.sql.functions as sf
 from datetime import datetime
 
 # Initialize Spark session
 spark = SparkSession.builder.appName("FurnitureStoreDataset").getOrCreate()
+
+# Create Spark Context
+sc = spark.sparkContext
 
 # List of first names
 
@@ -52,10 +56,25 @@ products = [
     (18, "Nursery Rocking Chair", "Kids Furniture", 119.99),
     (19, "Shoe Storage Cabinet", "Entryway Furniture", 59.99),
     (20, "Standing Desk", "Home Office Furniture", 249.99),
-    #(21, "Blanket", "Bedroom Furniture", 29.99)  #will add this later to my trend since this product will only sell during december
+    (21, "Blanket", "Bedroom Furniture", 29.99)  # Added Blanket with price
 ]
 
-#websites 
+customerIDs = sc.parallelize(range(1,1301))
+df = customerIDs.map(lambda x: (x,)).toDF(["customer_id"])
+
+#creating a function for pyspark to use
+def random_name():
+    first_name = random.choice(fnames)
+    last_name = random.choice(lnames)
+    return f"{first_name} {last_name}"
+
+
+
+#passing the function to pyspark as a user-defined function so it can see it
+random_name_udf = sf.udf(random_name)
+
+#passing the udf to withColumn, which will run the function for every row
+customer_table = df.withColumn("customer_name", random_name_udf())
 
 # Function to randomly generate a product with product_id, product_name, product_category, and price
 def generate_product():
@@ -63,65 +82,74 @@ def generate_product():
     return product_id, product_name, product_category, price
 
 # Example usage in generating records
-def generate_records(num_records):
-    data = []
-    for i in range(num_records):
-        product_id, product_name, product_category, price = generate_product()
-        record = Row(
-            order_id=i + 1, #change later
-            customer_id=random.randint(1, 100), #change later
-            customer_name=random.choice(["Mike", "Anna", "John", "Sarah", "Tom"]), #change later
-            product_id=product_id, 
-            product_name=product_name,
-            product_category=product_category,
-            payment_type=random.choice(["card", "cash", "online"]),
-            qty=random.randint(1, 5),
-            price=price,  # Use the hard-coded price
-            datetime=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            country="USA",
-            city=random.choice(["Houston", "Austin", "Dallas"]),
-            ecommerce_website_name="everythingstore.com",
-            payment_txn_id=str(random.randint(1000, 9999)),
-            payment_txn_success=random.choice(["Y", "N"]),
-            failure_reason=random.choice(["N/A", "Insufficient Funds", "Network Error"])
-        )
-        data.append(record)
-    return data
+# def generate_records():
+#     data = []
+#     product_id, product_name, product_category, price = generate_product()
+#     record = Row(
+#         order_id=i + 1, #change later
+#         customer_id=random.randint(1, 100), #change later
+#         customer_name=random.choice(["Mike", "Anna", "John", "Sarah", "Tom"]), #change later
+#         product_id=product_id, 
+#         product_name=product_name,
+#         product_category=product_category,
+#         payment_type=random.choice(["card", "cash", "online"]),
+#         qty=random.randint(1, 5),
+#         price=price,  # Use the hard-coded price
+#         datetime=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+#         country="USA",
+#         city=random.choice(["Houston", "Austin", "Dallas"]),
+#         ecommerce_website_name="everythingstore.com",
+#         payment_txn_id=str(random.randint(1000, 9999)),
+#         payment_txn_success=random.choice(["Y", "N"]),
+#         failure_reason=random.choice(["N/A", "Insufficient Funds", "Network Error"])
+#     )
+#     data.append(record)
+#     return data
 
-# Generate 100 records
-num_records = 100
-data = generate_records(num_records)
 
 # Define schema
-schema = StructType([
-    StructField("order_id", IntegerType(), True),
-    StructField("customer_id", IntegerType(), True),
-    StructField("customer_name", StringType(), True),
-    StructField("product_id", IntegerType(), True),
-    StructField("product_name", StringType(), True),
-    StructField("product_category", StringType(), True),
-    StructField("payment_type", StringType(), True),
-    StructField("qty", IntegerType(), True),
-    StructField("price", DoubleType(), True),
-    StructField("datetime", StringType(), True),  
-    StructField("country", StringType(), True),
-    StructField("city", StringType(), True),
-    StructField("ecommerce_website_name", StringType(), True),
-    StructField("payment_txn_id", StringType(), True),
-    StructField("payment_txn_success", StringType(), True),
-    StructField("failure_reason", StringType(), True)
-])
+# schema = StructType([
+#     StructField("order_id", IntegerType(), True),
+#     StructField("customer_id", IntegerType(), True),
+#     StructField("customer_name", StringType(), True),
+#     StructField("product_id", IntegerType(), True),
+#     StructField("product_name", StringType(), True),
+#     StructField("product_category", StringType(), True),
+#     StructField("payment_type", StringType(), True),
+#     StructField("qty", IntegerType(), True),
+#     StructField("price", DoubleType(), True),
+#     StructField("datetime", StringType(), True),  
+#     StructField("country", StringType(), True),
+#     StructField("city", StringType(), True),
+#     StructField("ecommerce_website_name", StringType(), True),
+#     StructField("payment_txn_id", StringType(), True),
+#     StructField("payment_txn_success", StringType(), True),
+#     StructField("failure_reason", StringType(), True)
+# ])
+
+
 
 # Create DataFrame
-randomdf = spark.createDataFrame(data, schema=schema)
-trend1df = spark.createDataFrame(data, schema=schema)
-trend2df = spark.createDataFrame(data, schema=schema)
-trend3df = spark.createDataFrame(data, schema=schema)
-trend4df = spark.createDataFrame(data, schema=schema)
+random_order_ids = sc.parallelize(range(1,4001))
+random_order_df = random_order_ids.map(lambda x: (x,)).toDF(["order_id"])
+
+# random_cust = spark.range(1).select(sf.round(sf.rand()*(1300))).alias("rand_cust_id")
+# random_cust.show()
+
+
+random_order_df.withColumn("customer_id", (lambda x: customer_table.filter(customer_table.customer_id == spark.range(1).select(sf.round(sf.rand()*(1300))).alias("rand").collect()[0][0]).select("customer_id").collect()[0][0]))
+
+random_order_df.withColumn("customer_name", (lambda id: customer_table.filter(customer_table.customer_id == id["customer_id"]-1).select("customer_name").collect()[0][0]))
+
+# randomdf = spark.createDataFrame(random_order_ids.map(lambda x: (x,)), schema=schema)
+#trend1df = spark.createDataFrame(data, schema=schema)
+#trend2df = spark.createDataFrame(data, schema=schema)
+#trend3df = spark.createDataFrame(data, schema=schema)
+#trend4df = spark.createDataFrame(data, schema=schema)
 
 
 # Convert 'datetime' to TimestampType
-randomdf = randomdf.withColumn("datetime", to_timestamp("datetime", "yyyy-MM-dd HH:mm:ss"))
+# randomdf = randomdf.withColumn("datetime", to_timestamp("datetime", "yyyy-MM-dd HH:mm:ss"))
 
 
 
@@ -134,13 +162,13 @@ randomdf = randomdf.withColumn("datetime", to_timestamp("datetime", "yyyy-MM-dd 
 
 
 #Coalesce the DataFrame to a single partition
-randomdf = randomdf.coalesce(1)
+# randomdf = randomdf.coalesce(1)
 
 # Show the DataFrame and schema
-randomdf.show()
-randomdf.printSchema()
+# randomdf.show()
+# randomdf.printSchema()
 
 # Write DataFrame to CSV 
-randomdf.write.csv("/project2/data", header=True, mode="overwrite")
+# randomdf.write.csv("/project2/data", header=True, mode="overwrite")
 
 
