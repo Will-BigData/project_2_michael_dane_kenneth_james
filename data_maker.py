@@ -55,6 +55,8 @@ products = [
     (21, "Blanket", "Bedroom Furniture", 29.99)  # Added Blanket with price
 ]
 
+#websites 
+
 # Function to randomly generate a product with product_id, product_name, product_category, and price
 def generate_product():
     product_id, product_name, product_category, price = random.choice(products)
