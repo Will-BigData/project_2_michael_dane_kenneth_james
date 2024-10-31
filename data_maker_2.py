@@ -48,7 +48,7 @@ michael_trend = generate_records(1000, random_date_in_december(), product_blanke
 
 data.extend(michael_trend)
 
-dane_trend = generate_records(num_records, random_date(), products, payment_type())
+dane_trend = generate_records(1000, random_date(), products, payment_type())
 
 data.extend(dane_trend)
 
