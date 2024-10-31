@@ -46,7 +46,7 @@ products = [
     (18, "Nursery Rocking Chair", "Kids Furniture", 119.99),
     (19, "Shoe Storage Cabinet", "Entryway Furniture", 59.99),
     (20, "Standing Desk", "Home Office Furniture", 249.99),
-    (21, "Blanket", "Bedroom Furniture", 29.99)  # Added Blanket with price
+    #(21, "Blanket", "Bedroom Furniture", 29.99)  #will add this later to my trend since this product will only sell during december
 ]
 
 #list of websites 
