@@ -10,8 +10,8 @@ spark = SparkSession.builder.appName("FurnitureStoreDataset").getOrCreate()
 
 
 
-# Example usage in generating records
-def generate_records(num_records):
+# generating records
+def generate_records(num_records, date_function, product_type):
     data = []
     for i in range(num_records):
         product_id, product_name, product_category, price = generate_product()
@@ -38,10 +38,14 @@ def generate_records(num_records):
         data.append(record)
     return data
 
-# Generate 100 records
+# Generate 9000 random records
 num_records = 9000
-data = generate_records(num_records)
+data = generate_records(num_records, random_date)
 
+#Generate 1000 records of michael's trend
+michael_trend = generate_records(1000, random_date_in_december)
+
+data.append()
 # Define schema
 schema = StructType([
     StructField("order_id", IntegerType(), True),
