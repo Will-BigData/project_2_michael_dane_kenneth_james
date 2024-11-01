@@ -52,6 +52,11 @@ michael_trend = generate_records(300, random_date_in_december(), product_blanket
 
 data.extend(michael_trend)
 
+#Generate 500 records of Kenny's Trend
+kenny_trend = generate_records(500, random_date_in_summer(), product_hammock, False)
+
+data.extend(kenny_trend)
+
 dane_trend = generate_records(300, random_date(), products, True)
 
 data.extend(dane_trend)
