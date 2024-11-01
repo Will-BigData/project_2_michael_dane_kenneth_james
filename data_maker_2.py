@@ -8,7 +8,7 @@ from datetime import datetime
 # Initialize Spark session
 spark = SparkSession.builder.appName("FurnitureStoreDataset").getOrCreate()
 
-
+x = 0
 
 # generating records
 def generate_records(num_records, date_function, product_type):
@@ -19,8 +19,9 @@ def generate_records(num_records, date_function, product_type):
         payment_txn_success = random.choice(["Y", "N"])
         bulk_mulitplier = check_city(city)
         payment = random.choice(["Card", "Internet Banking", "UPI", "Wallet"])
+        x = x+ 1
         record = Row(
-            order_id=i + 1,
+            order_id=x,
             customer_id= customer_id,
             customer_name= customer_name,
             product_id=product_id, 
@@ -49,16 +50,13 @@ michael_trend = generate_records(300, random_date_in_december(), product_blanket
 
 data.extend(michael_trend)
 
-<<<<<<< HEAD
 #Generate 500 records of Kenny's Trend
-kenny_trend = generate_records(500, random_date_in_summer(), product_hammock)
+#kenny_trend = generate_records(500, random_date_in_summer(), product_hammock)
 
-data.extend(kenny_trend)
-=======
-dane_trend = generate_records(300, random_date(), products)
->>>>>>> 94b9c28f0467d119177f9878557960acd72e109c
+#data.extend(kenny_trend)
+#dane_trend = generate_records(300, random_date(), products)
 
-data.extend(dane_trend)
+#data.extend(dane_trend)
 
 # Define schema
 schema = StructType([
