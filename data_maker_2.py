@@ -8,27 +8,22 @@ from datetime import datetime
 # Initialize Spark session
 spark = SparkSession.builder.appName("FurnitureStoreDataset").getOrCreate()
 
-x = 0
+
 
 # generating records
-def generate_records(num_records, date_function, product_type, choice):
+def generate_records(num_records, date_generator, product_type, choice, order_id):
     data = []
     for i in range(num_records):
         product_id, product_name, product_category, price = generate_product(product_type)
         customer_id, customer_name, country, city = generate_customers()
         payment_txn_success = random.choice(["Y", "N"])
         bulk_mulitplier = check_city(city)
-<<<<<<< HEAD
-        payment = random.choice(["Card", "Internet Banking", "UPI", "Wallet"])
-        x = x+ 1
-=======
         if choice == True:
             payment = "Internet Banking"
         else:
             payment = random.choice(["Card", "Internet Banking", "UPI", "Wallet"])
->>>>>>> 470fa9f589dc44c364a3be3abff232c2346c1f0d
         record = Row(
-            order_id=x,
+            order_id=order_id+i+1,
             customer_id= customer_id,
             customer_name= customer_name,
             product_id=product_id, 
@@ -37,7 +32,7 @@ def generate_records(num_records, date_function, product_type, choice):
             payment_type=payment,
             qty=random.randint(1, 5) * bulk_mulitplier,
             price=price,  
-            datetime=date_function.strftime("%Y-%m-%d %H:%M:%S"),
+            datetime=date_generator().strftime("%Y-%m-%d %H:%M:%S"),
             country=country,
             city= city,
             ecommerce_website_name= random.choice(websites),
@@ -50,28 +45,21 @@ def generate_records(num_records, date_function, product_type, choice):
 
 # Generate 10000 random records
 num_records = 10000
-data = generate_records(num_records, random_date(), products, False)
+data = generate_records(num_records, date_generator, products, False,0)
 
 #Generate 300 records of michael's trend
-michael_trend = generate_records(300, random_date_in_december(), product_blanket, False)
+michael_trend = generate_records(300, december_date, product_blanket, False,10000)
 
 data.extend(michael_trend)
 
 #Generate 500 records of Kenny's Trend
-<<<<<<< HEAD
-#kenny_trend = generate_records(500, random_date_in_summer(), product_hammock)
-
-#data.extend(kenny_trend)
-#dane_trend = generate_records(300, random_date(), products)
-=======
-kenny_trend = generate_records(500, random_date_in_summer(), product_hammock, False)
+kenny_trend = generate_records(500, random_date_in_summer, product_hammock, False, 10300)
 
 data.extend(kenny_trend)
 
-dane_trend = generate_records(300, random_date(), products, True)
->>>>>>> 470fa9f589dc44c364a3be3abff232c2346c1f0d
+dane_trend = generate_records(300, date_generator, products, True, 10800)
 
-#data.extend(dane_trend)
+data.extend(dane_trend)
 
 # Define schema
 schema = StructType([
