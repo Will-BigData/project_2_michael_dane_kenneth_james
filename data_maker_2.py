@@ -2,7 +2,8 @@ from func import *
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType, TimestampType
 from pyspark.sql import Row
-from pyspark.sql.functions import to_timestamp
+from pyspark.sql.functions import to_timestamp, rand, when, lit, col
+
 from datetime import datetime
 
 # Initialize Spark session
@@ -88,6 +89,23 @@ df = spark.createDataFrame(data, schema=schema)
 df = df.withColumn("datetime", to_timestamp("datetime", "yyyy-MM-dd HH:mm:ss"))
 
 
+# nullify some rows from product_id
+column_to_nullify = "product_id"
+
+# Nullify approximately 1% of rows from product_id
+df = df.withColumn(
+    column_to_nullify,
+    when(rand() < 0.01, lit(None)).otherwise(col(column_to_nullify))
+)
+
+# nullify some rows from country
+column_to_nullify = "country"
+
+# Nullify approximately 1% of rows from country
+df = df.withColumn(
+    column_to_nullify,
+    when(rand() < 0.01, lit(None)).otherwise(col(column_to_nullify))
+)
 
 #Coalesce the DataFrame to a single partition
 df = df.coalesce(1)
