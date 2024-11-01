@@ -11,14 +11,17 @@ spark = SparkSession.builder.appName("FurnitureStoreDataset").getOrCreate()
 
 
 # generating records
-def generate_records(num_records, date_function, product_type):
+def generate_records(num_records, date_function, product_type, choice):
     data = []
     for i in range(num_records):
         product_id, product_name, product_category, price = generate_product(product_type)
         customer_id, customer_name, country, city = generate_customers()
         payment_txn_success = random.choice(["Y", "N"])
         bulk_mulitplier = check_city(city)
-        payment = random.choice(["Card", "Internet Banking", "UPI", "Wallet"])
+        if choice == True:
+            payment = "Internet Banking"
+        else:
+            payment = random.choice(["Card", "Internet Banking", "UPI", "Wallet"])
         record = Row(
             order_id=i + 1,
             customer_id= customer_id,
@@ -42,21 +45,14 @@ def generate_records(num_records, date_function, product_type):
 
 # Generate 10000 random records
 num_records = 10000
-data = generate_records(num_records, random_date(), products)
+data = generate_records(num_records, random_date(), products, False)
 
 #Generate 300 records of michael's trend
-michael_trend = generate_records(300, random_date_in_december(), product_blanket)
+michael_trend = generate_records(300, random_date_in_december(), product_blanket, False)
 
 data.extend(michael_trend)
 
-<<<<<<< HEAD
-#Generate 500 records of Kenny's Trend
-kenny_trend = generate_records(500, random_date_in_summer(), product_hammock)
-
-data.extend(kenny_trend)
-=======
-dane_trend = generate_records(300, random_date(), products)
->>>>>>> 94b9c28f0467d119177f9878557960acd72e109c
+dane_trend = generate_records(300, random_date(), products, True)
 
 data.extend(dane_trend)
 
