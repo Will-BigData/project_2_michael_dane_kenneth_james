@@ -12,14 +12,14 @@ spark = SparkSession.builder.appName("FurnitureStoreDataset").getOrCreate()
 
 
 # generating records
-def generate_records(num_records, date_generator, product_type, choice, order_id):
+def generate_records(num_records, date_generator, product_type, pay_type, order_id):
     data = []
     for i in range(num_records):
         product_id, product_name, product_category, price = generate_product(product_type)
         customer_id, customer_name, country, city = generate_customers()
         payment_txn_success = random.choice(["Y", "N"])
         bulk_mulitplier = check_city(city)
-        if choice == True:
+        if pay_type == True:
             payment = "Internet Banking"
         else:
             payment = random.choice(["Card", "Internet Banking", "UPI", "Wallet"])
