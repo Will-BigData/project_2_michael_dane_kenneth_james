@@ -3,6 +3,7 @@ from pyspark.sql.types import *
 from pyspark.sql.functions import udf, expr, to_timestamp, rand, concat, lit, lpad, col, when
 import random
 from var import *
+from func import check_city
 
 # Initialize Spark Session
 spark = SparkSession.builder \
@@ -25,6 +26,7 @@ def get_random_product_id():
 @udf("int")
 def get_random_customer_id():
     return random.choice([customer[0] for customer in customers])
+
 
 # Create the 10,000 records
 num_records = 10000  # Adjust number of records
@@ -65,6 +67,20 @@ df = df.withColumn("customer_id", get_random_customer_id())
 df = df.join(customer_df, "customer_id", "left") 
 
 
+
+
+
+
+
+
+
+
+
+#adding ecommerce_website_name column
+df = df.withColumn("ecommerce_website_name",random.choice(websites))
+
+
+
 # Create a new DataFrame with 10,000
 df_2 = spark.range(0, num_records).withColumnRenamed("id", "order_id")
 
@@ -75,13 +91,30 @@ df_2 = df_2.withColumn("payment_txn_id", concat(lit("CODE"), lpad(col("order_id"
 #join the new Data Frame with the main data frame
 df = df.join(df_2, on = "order_id", how= "inner")
 
-#adding payment_txn_success column
+
+# Define payment_txn_success probabilities
 choice_column = (
     when(rand() < 0.5, success[0])
     .otherwise(success[1])
 )
 
+
+
+#adding payment_txn_success column
 df = df.withColumn("payment_txn_success",choice_column)
+
+# Define reason probabilities
+N_reason = (
+    when(rand() < 0.5, reason[0])
+    .otherwise(reason[1])
+)
+
+#adding faliure_reason column
+df = df.withColumn(
+    "failure_reason",
+    when(col("payment_txn_success") == "Y", "SUCCESS" )
+    .otherwise(N_reason) 
+    )
 
 
 
