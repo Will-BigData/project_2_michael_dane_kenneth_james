@@ -135,9 +135,16 @@ df = df.withColumn(
 #adding qty column, first when condition addes James's trend
 df = df.withColumn(
     "qty",
-    when(col("city") == "Chicago" or  "Vancouver" or "Los Angeles" or "Berlin", random.randint(1, 5) *random.randint(4,7))
+    when(
+        (col("city") == "Chicago") | 
+        (col("city") == "Vancouver") | 
+        (col("city") == "Los Angeles") | 
+        (col("city") == "Berlin"),
+        random.randint(1, 5) * random.randint(4, 7)
+    )
     .otherwise(random.randint(1, 5))
 )
+
 
 
 
