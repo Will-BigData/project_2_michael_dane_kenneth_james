@@ -21,7 +21,7 @@ customer_df = spark.createDataFrame(customers, ["customer_id", "customer_name", 
 michael_df = spark.createDataFrame(product_blanket, ["product_id", "product_name", "product_category", "price"])
 
 #kenny's trend
-michael_df = spark.createDataFrame(product_hammock, ["product_id", "product_name", "product_category", "price"])
+kenny_df = spark.createDataFrame(product_hammock, ["product_id", "product_name", "product_category", "price"])
 
 
 
@@ -78,6 +78,97 @@ df = df.join(customer_df, "customer_id", "left")
 
 
 
+#ADDING MY TREND 
+df_150 = spark.range(num_records, num_records+150).withColumnRenamed("id", "order_id")
+
+
+#add product_id column 
+df_150 = df_150.withColumn("product_id", lit(21))
+
+# left join to match product_id with product_name, product_category, price
+df_150 = df_150.join(michael_df, "product_id", "left") 
+
+# Date range: 12/1/2020 to 12/30/2020
+start_datetime = "2020-12-01 00:00:00"
+end_datetime = "2020-12-31 23:59:59"
+
+
+# Calculate the difference in seconds between start and end datetime
+date_format = "yyyy-MM-dd HH:mm:ss"
+df_diff = spark.sql(f"SELECT unix_timestamp('{end_datetime}', '{date_format}') - unix_timestamp('{start_datetime}', '{date_format}') AS diff").collect()[0][0]
+
+# Generate a random timestamp by adding a random number of seconds to the start_datetime for datetime column
+df_150 = df_150.withColumn(
+    "datetime",
+    to_timestamp(expr(f"from_unixtime(unix_timestamp('{start_datetime}') + cast(rand() * {df_diff} as int))"))
+)
+
+
+#add customer_id column 
+df_150 = df_150.withColumn("customer_id", get_random_customer_id())
+
+
+# left join to match customer_id with customer_name, country, and city
+df_150 = df_150.join(customer_df, "customer_id", "left") 
+
+
+
+#Stack df_150 below df
+df = df.union(df_150)
+
+
+num_records += 150 
+df_150 = spark.range(num_records, num_records+150).withColumnRenamed("id", "order_id")
+
+
+#add product_id column 
+df_150 = df_150.withColumn("product_id", lit(21))
+
+# left join to match product_id with product_name, product_category, price
+df_150 = df_150.join(michael_df, "product_id", "left") 
+
+# Date range: 12/1/2021 to 12/30/2021
+start_datetime = "2021-12-01 00:00:00"
+end_datetime = "2021-12-31 23:59:59"
+
+
+# Calculate the difference in seconds between start and end datetime
+date_format = "yyyy-MM-dd HH:mm:ss"
+df_diff = spark.sql(f"SELECT unix_timestamp('{end_datetime}', '{date_format}') - unix_timestamp('{start_datetime}', '{date_format}') AS diff").collect()[0][0]
+
+# Generate a random timestamp by adding a random number of seconds to the start_datetime for datetime column
+df_150 = df_150.withColumn(
+    "datetime",
+    to_timestamp(expr(f"from_unixtime(unix_timestamp('{start_datetime}') + cast(rand() * {df_diff} as int))"))
+)
+
+
+#add customer_id column 
+df_150 = df_150.withColumn("customer_id", get_random_customer_id())
+
+
+# left join to match customer_id with customer_name, country, and city
+df_150 = df_150.join(customer_df, "customer_id", "left") 
+
+
+
+#Stack df_150 below df
+df = df.union(df_150)
+
+
+
+
+
+
+
+
+
+
+
+
+
+""" 
+#ADDING THESE COLUMNS AT THE END 
 
 
 # Define ecommerce_website_name probabilities
@@ -93,6 +184,7 @@ choice_column = (
 
 #adding ecommerce_website_name column
 df = df.withColumn("ecommerce_website_name",choice_column)
+
 
 
 
@@ -149,7 +241,7 @@ df = df.withColumn(
 
 
 
-
+ """
 
 
 #Coalesce the DataFrame to a single partition
