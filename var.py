@@ -59,5 +59,10 @@ payment =["Card", "Internet Banking", "UPI", "Wallet"]
 #list of reasons 
 reason = ["Insufficient Funds", "Network Error"]
 
+
+success  = ["Y", "N"]
+
+ 
+
 #list of websites 
 websites = [ ("HomeHavenFurniture.com"), ("StyleNestFurniture.com"), ("ChicSpaceFurnishings.com"), ("CozyCornerDecor.com"), ("TimelessHomeStyles.com")]

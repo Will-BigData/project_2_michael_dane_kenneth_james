@@ -1,8 +1,8 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
-from pyspark.sql.functions import udf, expr, to_timestamp, rand, concat, lit, lpad, col
+from pyspark.sql.functions import udf, expr, to_timestamp, rand, concat, lit, lpad, col, when
 import random
-from var import product_blanket, product_hammock, customers, payment, products
+from var import *
 
 # Initialize Spark Session
 spark = SparkSession.builder \
@@ -75,8 +75,13 @@ df_2 = df_2.withColumn("payment_txn_id", concat(lit("CODE"), lpad(col("order_id"
 #join the new Data Frame with the main data frame
 df = df.join(df_2, on = "order_id", how= "inner")
 
+#adding payment_txn_success column
+choice_column = (
+    when(rand() < 0.5, success[0])
+    .otherwise(success[1])
+)
 
-
+df = df.withColumn("payment_txn_success",choice_column)
 
 
 
