@@ -53,5 +53,11 @@ product_blanket =  [ (21, "Blanket", "Bedroom Furniture", 29.99) ]
 product_hammock = [ (22, "Hammock", "Outdoor Furniture", 49.99) ]
 
 
+#list of payments
+payment =["Card", "Internet Banking", "UPI", "Wallet"]
+
+#list of reasons 
+reason = ["Insufficient Funds", "Network Error"]
+
 #list of websites 
 websites = [ ("HomeHavenFurniture.com"), ("StyleNestFurniture.com"), ("ChicSpaceFurnishings.com"), ("CozyCornerDecor.com"), ("TimelessHomeStyles.com")]

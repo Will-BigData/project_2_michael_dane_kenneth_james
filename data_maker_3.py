@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
-from pyspark.sql.functions import udf, expr, to_timestamp, rand
+from pyspark.sql.functions import udf, expr, to_timestamp, rand, concat, lit, lpad, col
 import random
 from var import product_blanket, product_hammock, customers, payment, products
 
@@ -65,7 +65,15 @@ df = df.withColumn("customer_id", get_random_customer_id())
 df = df.join(customer_df, "customer_id", "left") 
 
 
+# Create a new DataFrame with 10,000
+df_2 = spark.range(0, num_records).withColumnRenamed("id", "order_id")
 
+# Generate a unique alphanumeric payment_txn_id with prefix "CODE"
+df_2 = df_2.withColumn("payment_txn_id", concat(lit("CODE"), lpad(col("order_id").cast("string"), 12, "0")))
+
+
+#join the new Data Frame with the main data frame
+df = df.join(df_2, on = "order_id", how= "inner")
 
 
 
