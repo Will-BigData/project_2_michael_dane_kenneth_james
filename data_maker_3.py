@@ -72,12 +72,19 @@ df = df.join(customer_df, "customer_id", "left")
 
 
 
-
+# Define ecommerce_website_name probabilities
+choice_column = (
+    when(rand() < 0.2, websites[0])
+    .when(rand() < 0.4, websites[1])
+    .when(rand() < 0.6, websites[2])
+    .when(rand() < 0.8, websites[3])
+    .otherwise(websites[4])
+)
 
 
 
 #adding ecommerce_website_name column
-df = df.withColumn("ecommerce_website_name",random.choice(websites))
+df = df.withColumn("ecommerce_website_name",choice_column)
 
 
 

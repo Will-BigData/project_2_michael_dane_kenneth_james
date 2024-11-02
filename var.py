@@ -65,4 +65,4 @@ success  = ["Y", "N"]
  
 
 #list of websites 
-websites = [ ("HomeHavenFurniture.com"), ("StyleNestFurniture.com"), ("ChicSpaceFurnishings.com"), ("CozyCornerDecor.com"), ("TimelessHomeStyles.com")]
+websites = [ "HomeHavenFurniture.com", "StyleNestFurniture.com", "ChicSpaceFurnishings.com", "CozyCornerDecor.com", "TimelessHomeStyles.com"]
