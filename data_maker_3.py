@@ -17,6 +17,14 @@ product_df = spark.createDataFrame(products, ["product_id", "product_name", "pro
 customer_df = spark.createDataFrame(customers, ["customer_id", "customer_name", "country", "city"])
 
 
+#michael's trend
+michael_df = spark.createDataFrame(product_blanket, ["product_id", "product_name", "product_category", "price"])
+
+#kenny's trend
+michael_df = spark.createDataFrame(product_hammock, ["product_id", "product_name", "product_category", "price"])
+
+
+
 # Custom UDFs for generating fields based on products
 @udf("int")
 def get_random_product_id():
@@ -52,9 +60,9 @@ end_datetime = "2022-01-01 00:00:00"
 date_format = "yyyy-MM-dd HH:mm:ss"
 df_diff = spark.sql(f"SELECT unix_timestamp('{end_datetime}', '{date_format}') - unix_timestamp('{start_datetime}', '{date_format}') AS diff").collect()[0][0]
 
-# Generate a random timestamp by adding a random number of seconds to the start_datetime
+# Generate a random timestamp by adding a random number of seconds to the start_datetime for datetime column
 df = df.withColumn(
-    "random_timestamp",
+    "datetime",
     to_timestamp(expr(f"from_unixtime(unix_timestamp('{start_datetime}') + cast(rand() * {df_diff} as int))"))
 )
 
@@ -121,9 +129,15 @@ df = df.withColumn(
     "failure_reason",
     when(col("payment_txn_success") == "Y", "SUCCESS" )
     .otherwise(N_reason) 
-    )
+)
 
 
+#adding qty column, first when condition addes James's trend
+df = df.withColumn(
+    "qty",
+    when(col("city") == "Chicago" or  "Vancouver" or "Los Angeles" or "Berlin", random.randint(1, 5) *random.randint(4,7))
+    .otherwise(random.randint(1, 5))
+)
 
 
 
