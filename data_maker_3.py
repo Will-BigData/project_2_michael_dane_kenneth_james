@@ -20,7 +20,7 @@ customer_df = spark.createDataFrame(customers, ["customer_id", "customer_name", 
 #michael's trend
 michael_df = spark.createDataFrame(product_blanket, ["product_id", "product_name", "product_category", "price"])
 
-#kenny's trend
+#kenny's trend 
 kenny_df = spark.createDataFrame(product_hammock, ["product_id", "product_name", "product_category", "price"])
 
 
@@ -158,6 +158,7 @@ df = df.union(df_150)
 
 
 
+#END OF MY TREND
 
 
 
@@ -167,7 +168,6 @@ df = df.union(df_150)
 
 
 
-""" 
 #ADDING THESE COLUMNS AT THE END 
 
 
@@ -239,7 +239,28 @@ df = df.withColumn(
 
 
 
+""" 
 
+
+# adds between 1 to 2 percent rouge data
+
+# nullify some rows from product_id
+column_to_nullify = "product_id"
+
+# Nullify approximately 1% of rows from product_id
+df = df.withColumn(
+    column_to_nullify,
+    when(rand() < 0.01, lit(None)).otherwise(col(column_to_nullify))
+)
+
+# nullify some rows from country
+column_to_nullify = "country"
+
+# Nullify approximately 1% of rows from country
+df = df.withColumn(
+    column_to_nullify,
+    when(rand() < 0.01, lit(None)).otherwise(col(column_to_nullify))
+)
 
  """
 
