@@ -7,7 +7,7 @@ from func import check_city
 
 # Initialize Spark Session
 spark = SparkSession.builder \
-    .appName("Random Data Generation") \
+    .appName("Furniture Store Data Generation 3.0") \
     .getOrCreate()
 
 # Convert product list to a DataFrame
