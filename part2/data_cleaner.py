@@ -14,7 +14,10 @@ df = df.na.drop(subset = columns_to_check)
 df.createOrReplaceTempView("table") 
 
 #Filter out rows where price <= 0 and qty <= 0" 
-filter_df = spark.sql("SELECT COUNT(*) FROM table WHERE price > 0 and qty > 0")
+filter_df = spark.sql("SELECT * FROM table WHERE price > 0 and qty > 0")
 
 
 filter_df.show()
+
+# Write the filtered/cleaned data to CSV 
+filter_df.coalesce(1).write.csv("/project2/data", header=True, mode="overwrite")
