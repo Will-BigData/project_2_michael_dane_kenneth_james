@@ -55,3 +55,4 @@ Power BI was used to create visuals highlighting trend patterns and outliers, pr
 - `func.py`: Helper functions for data generation.
 - `var.py`: Variables for customer, product, and trend definitions.
 - `data_maker_2.py`: Enhanced PySpark version for data generation.
+- `data_cleaner.py`: Script for cleaning and analyzing data.
