@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import when
 
 spark = SparkSession.builder.appName("DataCleaning").getOrCreate()
 
@@ -36,6 +37,14 @@ car_df = car_df.select('product_category', 'product_name', 'gross_product', 'gen
 car_df = car_df.groupBy('product_name', 'product_category', 'gender').sum()
 car_df = car_df.filter(car_df.product_category == "Automobile").sort(["product_name", "sum(gross_product)"], ascending=[False, False])
 car_df.show()
+
+
+#Find and group all transaction Failures
+# fail_df = df.select('country','city','qty','payment_transaction_success')
+# fail_df = fail_df.filter(fail_df.payment_transaction_success == "N")
+# fail_df = fail_df.withColumn("payment_transaction_success", when(fail_df.payment_transaction_success == "N", 1))
+# fail_df = fail_df.select(fail_df.country,fail_df.city,fail_df.qty,fail_df.payment_transaction_success.alias("failed_transactions"))
+
 
 
 # Write the filtered/cleaned data to CSV 
