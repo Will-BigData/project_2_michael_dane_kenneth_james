@@ -9,6 +9,7 @@
 
 ### Project Overview
 This project involves generating, analyzing, and visualizing an e-commerce dataset to identify trends and insights. The primary phases include data generation, trend input, analysis, and visualization using Python, PySpark, and Power BI.
+
 Trello to manage project tasks: https://trello.com/b/6CAQtTQ9/project-2
 
 ### Objectives
