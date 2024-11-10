@@ -201,7 +201,7 @@ df_150 = spark.range(num_records, num_records+150).withColumnRenamed("id", "orde
 
 
 #add product_id column 
-df_150 = df_150.withColumn("product_id", lit(21))
+df_150 = df_150.withColumn("product_id", lit(22))
 
 # left join to match product_id with product_name, product_category, price
 df_150 = df_150.join(kenny_df, "product_id", "left") 
@@ -235,8 +235,6 @@ df_150 = df_150.join(customer_df, "customer_id", "left")
 df = df.union(df_150)
 
 #END OF Kenny's TREND
-
-
 num_records += 150
 
 
