@@ -80,14 +80,13 @@ df = df.join(customer_df, "customer_id", "left")
 #ADDING MY TREND 
 df_150 = spark.range(num_records, num_records+150).withColumnRenamed("id", "order_id")
 
-
 #add product_id column 
 df_150 = df_150.withColumn("product_id", lit(21))
 
 # left join to match product_id with product_name, product_category, price
 df_150 = df_150.join(michael_df, "product_id", "left") 
 
-# Date range: 12/1/2020 to 12/30/2020
+# Date range: 12/1/2020 to 12/31/2020
 start_datetime = "2020-12-01 00:00:00"
 end_datetime = "2020-12-31 23:59:59"
 
@@ -126,7 +125,7 @@ df_150 = df_150.withColumn("product_id", lit(21))
 # left join to match product_id with product_name, product_category, price
 df_150 = df_150.join(michael_df, "product_id", "left") 
 
-# Date range: 12/1/2021 to 12/30/2021
+# Date range: 12/1/2021 to 12/31/2021
 start_datetime = "2021-12-01 00:00:00"
 end_datetime = "2021-12-31 23:59:59"
 
@@ -154,16 +153,91 @@ df_150 = df_150.join(customer_df, "customer_id", "left")
 #Stack df_150 below df
 df = df.union(df_150)
 
-
-
-
 #END OF MY TREND
 
 
 
+#ADDING Kenny's TREND 
+num_records += 150 
+df_150 = spark.range(num_records, num_records+150).withColumnRenamed("id", "order_id")
+
+#add product_id column 
+df_150 = df_150.withColumn("product_id", lit(22))
+
+# left join to match product_id with product_name, product_category, price
+df_150 = df_150.join(kenny_df, "product_id", "left") 
+
+# Date range: 6/1/2020 to 8/31/2020
+start_datetime = "2020-06-01 00:00:00"
+end_datetime = "2020-08-31 23:59:59"
+
+
+# Calculate the difference in seconds between start and end datetime
+date_format = "yyyy-MM-dd HH:mm:ss"
+df_diff = spark.sql(f"SELECT unix_timestamp('{end_datetime}', '{date_format}') - unix_timestamp('{start_datetime}', '{date_format}') AS diff").collect()[0][0]
+
+# Generate a random timestamp by adding a random number of seconds to the start_datetime for datetime column
+df_150 = df_150.withColumn(
+    "datetime",
+    to_timestamp(expr(f"from_unixtime(unix_timestamp('{start_datetime}') + cast(rand() * {df_diff} as int))"))
+)
+
+
+#add customer_id column 
+df_150 = df_150.withColumn("customer_id", get_random_customer_id())
+
+
+# left join to match customer_id with customer_name, country, and city
+df_150 = df_150.join(customer_df, "customer_id", "left") 
 
 
 
+#Stack df_150 below df
+df = df.union(df_150)
+
+
+num_records += 150 
+df_150 = spark.range(num_records, num_records+150).withColumnRenamed("id", "order_id")
+
+
+#add product_id column 
+df_150 = df_150.withColumn("product_id", lit(21))
+
+# left join to match product_id with product_name, product_category, price
+df_150 = df_150.join(kenny_df, "product_id", "left") 
+
+# Date range: 6/1/2021 to 8/31/2021
+start_datetime = "2021-06-01 00:00:00"
+end_datetime = "2021-08-31 23:59:59"
+
+
+# Calculate the difference in seconds between start and end datetime
+date_format = "yyyy-MM-dd HH:mm:ss"
+df_diff = spark.sql(f"SELECT unix_timestamp('{end_datetime}', '{date_format}') - unix_timestamp('{start_datetime}', '{date_format}') AS diff").collect()[0][0]
+
+# Generate a random timestamp by adding a random number of seconds to the start_datetime for datetime column
+df_150 = df_150.withColumn(
+    "datetime",
+    to_timestamp(expr(f"from_unixtime(unix_timestamp('{start_datetime}') + cast(rand() * {df_diff} as int))"))
+)
+
+
+#add customer_id column 
+df_150 = df_150.withColumn("customer_id", get_random_customer_id())
+
+
+# left join to match customer_id with customer_name, country, and city
+df_150 = df_150.join(customer_df, "customer_id", "left") 
+
+
+
+#Stack df_150 below df
+df = df.union(df_150)
+
+#END OF Kenny's TREND
+
+
+num_records += 150
 
 
 
@@ -236,6 +310,17 @@ df = df.withColumn(
     .otherwise(random.randint(1, 5))
 )
 
+# dane's trend
+choice_column = (
+    when(rand() < 0.7, payment[1])
+    .when(rand() < 0.8, payment[0])
+    .when(rand() < 0.9, payment[2])
+    .otherwise(payment[3])
+)
+
+
+#adding payment_type column with dane's trend
+df = df.withColumn( "payment_type", choice_column)
 
 
 """ 
@@ -264,12 +349,22 @@ df = df.withColumn(
  """
 
 
+df =  df.orderBy("order_id") #demo purposes
+row_count = df.count()
+col_count = len(df.columns)
+
+
 #Coalesce the DataFrame to a single partition
 df = df.coalesce(1)
 
-# Show the DataFrame and schema
-df.show()
+# Show schema
+print("SCHEMA")
 df.printSchema()
+
 
 # Write DataFrame to CSV 
 df.write.csv("/project2/data", header=True, mode="overwrite")
+
+#for demo purposes
+print("number of Records generated = " + str(row_count))
+print("number of columns = " + str(col_count))
