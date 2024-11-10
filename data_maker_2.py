@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
-from pyspark.sql.functions import udf, expr, to_timestamp, rand, concat, lit, lpad, col, when
+from pyspark.sql.functions import udf, expr, to_timestamp, rand, concat, lit, lpad, col, when,round
 import random
 from var import *
 
@@ -303,9 +303,8 @@ df = df.withColumn(
         (col("city") == "Vancouver") | 
         (col("city") == "Los Angeles") | 
         (col("city") == "Berlin"),
-        random.randint(1, 5) * random.randint(4, 7)
-    )
-    .otherwise(random.randint(1, 5))
+        round(rand() * 5 + 1) * round(rand() * 3 + 4)
+    ).otherwise(round(rand() * 4 + 1))
 )
 
 # dane's trend
