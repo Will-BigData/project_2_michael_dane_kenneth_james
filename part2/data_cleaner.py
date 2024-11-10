@@ -20,7 +20,7 @@ filter_df = spark.sql("SELECT * FROM table WHERE price > 0 and qty > 0")
 
 filter_df.show()
 
-#Findthe qty sold for each product name
+#Find the qty sold for each product name
 pop_products_df = filter_df.select('product_name', 'price', 'qty', 'payment_transaction_success')
 pop_products_df = pop_products_df.filter(pop_products_df.payment_transaction_success == "Y")
 pop_products_df = pop_products_df.select('product_name', 'price', 'qty')
