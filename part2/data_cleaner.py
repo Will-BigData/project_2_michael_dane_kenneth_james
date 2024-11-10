@@ -28,7 +28,7 @@ pop_products_df = pop_products_df.groupBy("product_name").sum().sort("sum(qty)",
 pop_products_df.show()
 
 
-#Find automobile product sales by gender
+#Find the qty sold for each product name
 car_df = filter_df.select('product_category','product_name','price', 'qty', 'gender', 'payment_transaction_success')
 car_df = car_df.filter(car_df.payment_transaction_success == "Y")
 car_df = car_df.select('product_category','product_name','price', 'qty', 'gender')
@@ -51,8 +51,8 @@ car_df.show()
 filter_df.coalesce(1).write.csv("/project2/data", header=True, mode="overwrite")
 
 
-pop_products_df.coalesce(1).write.csv("/project2/trend1", header=True, mode="overwrite")
+pop_products_df.coalesce(1).write.csv("/project2/analysis1", header=True, mode="overwrite")
 
-car_df.coalesce(1).write.csv("/project2/trend2", header=True, mode="overwrite")
+car_df.coalesce(1).write.csv("/project2/analysis2", header=True, mode="overwrite")
 
 
