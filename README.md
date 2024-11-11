@@ -23,7 +23,6 @@ Trello to manage project tasks: https://trello.com/b/6CAQtTQ9/project-2
   - 22 unique products across 7 categories
   - 5 website names
 - **Date Range**: Records span from January 1, 2020, to January 1, 2022.
-- **Data Composition**: Approximately 90% of records are randomly generated, with 10% following specific trends.
 - **Rogue Data**: 1-2% of records contain intentional inconsistencies to simulate real-world data irregularities.
 
 ### Trends
